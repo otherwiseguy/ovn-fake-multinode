@@ -19,9 +19,9 @@ use_ovn_rpm=$1
 extra_optimize=$2
 
 if [ "$extra_optimize" = "yes" ]; then
-    cflags='-g -march=native -O3 -fno-omit-frame-pointer'
+    cflags='-g -march=native -O3 -fno-omit-frame-pointer -Wno-deprecated-declarations'
 else
-    cflags='-g -O2 -fno-omit-frame-pointer'
+    cflags='-g -O2 -fno-omit-frame-pointer -Wno-deprecated-declarations'
 fi
 
 if [ "$use_ovn_rpm" = "yes" ]; then
@@ -34,7 +34,7 @@ else
     cd /ovs
     ./boot.sh
     ./configure --localstatedir="/var" --sysconfdir="/etc" --prefix="/usr" \
-    --enable-ssl --disable-libcapng --enable-Werror CFLAGS="${cflags}"
+    --enable-ssl --disable-libcapng CFLAGS="${cflags}"
     make -j$(($(nproc) + 1)) V=0
     make install
     cp ./ovsdb/_server.ovsschema /root/ovsdb-etcd/schemas/
@@ -48,7 +48,7 @@ else
     # build. Note: no explicit install is needed here.
     ./boot.sh
     ./configure --localstatedir="/var" --sysconfdir="/etc" --prefix="/usr" \
-    --enable-ssl --disable-libcapng --enable-Werror CFLAGS="${cflags}"
+    --enable-ssl --disable-libcapng CFLAGS="${cflags}"
     make -j$(($(nproc) + 1)) V=0
 
     cd /ovn
