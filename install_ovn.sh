@@ -34,10 +34,15 @@ else
     cd /ovs
     ./boot.sh
     ./configure --localstatedir="/var" --sysconfdir="/etc" --prefix="/usr" \
-    --enable-ssl --disable-libcapng CFLAGS="${cflags}"
+    --enable-ssl --disable-libcapng --enable-shared CFLAGS="${cflags}"
     make -j$(($(nproc) + 1)) V=0
     make install
     cp ./ovsdb/_server.ovsschema /root/ovsdb-etcd/schemas/
+    pushd python
+    pip install wheel
+    python3 setup.py bdist_wheel
+    pip install dist/*.whl
+    popd
 
     # Build OVS libraries from submodule, needed by OVN.
     cd /ovn
