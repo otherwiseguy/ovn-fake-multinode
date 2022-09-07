@@ -30,6 +30,9 @@ if [ "$use_ovn_rpm" = "yes" ]; then
 else
     mkdir -p /root/ovsdb-etcd/schemas
 
+    # Install python3-devl rpms for C JSON extension
+    dnf -y install python3-devel
+
     # Build OVS binaries and install them.
     cd /ovs
     ./boot.sh
